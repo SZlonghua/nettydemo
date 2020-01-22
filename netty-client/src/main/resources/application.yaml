@@ -1,0 +1,18 @@
+server:
+  tomcat:
+    uri-encoding: UTF-8
+  port: 8082
+  servlet:
+    context-path: /
+
+spring:
+  profiles:
+    active: dev
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss #如果使用字符串表示，用这行设置格式
+    timezone: GMT+8
+
+
+netty:
+  client:
+    port: 8666
