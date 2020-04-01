@@ -17,10 +17,11 @@ public class NIOServerHandler extends ChannelInboundHandlerAdapter {
         byte[] reg = new byte[buf.readableBytes()];
         buf.readBytes(reg);
         String body = new String(reg, "UTF-8");
-        System.out.println("服务端收到消息："+body);
+        log.info("服务端收到消息："+body);
 
         ByteBuf byteBuffer = Unpooled.buffer(1024);
-        byteBuffer.writeBytes(Charset.defaultCharset().encode("服务端发消息"));
+        //byteBuffer.writeBytes(Charset.defaultCharset().encode("服务端发消息"));
+        byteBuffer.writeBytes(Charset.defaultCharset().encode("liaotao"));
         ctx.write(byteBuffer);
     }
 

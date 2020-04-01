@@ -28,7 +28,7 @@ public class NIOClientHandler extends ChannelInboundHandlerAdapter {
         byte[] reg = new byte[buf.readableBytes()];
         buf.readBytes(reg);
         String body = new String(reg, "UTF-8");
-        System.out.println("客户端收到消息："+body);
+        log.info("客户端收到消息："+body);
 
         ByteBuf byteBuffer = Unpooled.buffer(1024);
         byteBuffer.writeBytes(Charset.defaultCharset().encode("客户端发消息"));
