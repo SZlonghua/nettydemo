@@ -20,12 +20,7 @@ public class Protocol {
     private Object content;
 
 
-    public short getPacketLen(){
-        byte[] bytes = ((String) content).getBytes(Charset.forName("UTF-8"));
-        return (short)(getHeaderLen()+bytes.length);
-    }
-
-    private short getHeaderLen(){
+    public short getHeaderLen(){
         return 3;
     }
 

@@ -1,5 +1,7 @@
 package com.netty.common.codec;
 
+import com.netty.common.constant.CommandMapping;
+import com.netty.common.decoder.Decoder;
 import com.netty.common.protocol.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -35,6 +37,10 @@ public class TerminalDecoder extends LengthFieldBasedFrameDecoder {
         //读取content
         byte[] bytes = new byte[in.readableBytes()];
         in.readBytes(bytes);
-        return new Protocol(packetLen,command,new String(bytes,"UTF-8"));
+        //获取相应内容对象解码器
+        Decoder decoder = CommandMapping.getDecoder(command);
+        //解析成内容对象
+        Object content = decoder.decode(bytes);
+        return new Protocol(packetLen,command,content);
     }
 }
