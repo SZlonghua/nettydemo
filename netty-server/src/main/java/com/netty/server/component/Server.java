@@ -1,7 +1,9 @@
 package com.netty.server.component;
 
 
-import com.netty.server.handler.NIOServerHandler;
+import com.netty.common.codec.TerminaEncoder;
+import com.netty.common.codec.TerminalDecoder;
+import com.netty.server.handler.TerminaServerHandler;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -39,7 +41,9 @@ public class Server {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline pipeline = ch.pipeline();
-                            pipeline.addLast(new NIOServerHandler());
+                            pipeline.addLast("decoder",new TerminalDecoder(Integer.MAX_VALUE,0,2,-2,0));
+                            pipeline.addLast("encoder",new TerminaEncoder());
+                            pipeline.addLast(new TerminaServerHandler());
                         }
                     });
             ChannelFuture f = b.bind(port).sync();

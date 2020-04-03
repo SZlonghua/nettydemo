@@ -1,13 +1,13 @@
 package com.netty.client.component;
 
 
-import com.netty.client.handler.NIOClientHandler;
+import com.netty.client.handler.TerminaClientHandler;
+import com.netty.common.codec.TerminaEncoder;
+import com.netty.common.codec.TerminalDecoder;
 import io.netty.bootstrap.Bootstrap;
-import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.SocketChannel;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.channel.socket.nio.NioSocketChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,7 +42,9 @@ public class Client {
                         @Override
                         protected void initChannel(SocketChannel ch) throws Exception {
                             ChannelPipeline p = ch.pipeline();
-                            p.addLast(new NIOClientHandler());
+                            p.addLast("decoder",new TerminalDecoder(Integer.MAX_VALUE,0,2,-2,0));
+                            p.addLast("encoder",new TerminaEncoder());
+                            p.addLast(new TerminaClientHandler());
                         }
                     });
             // Start the client.
