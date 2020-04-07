@@ -7,6 +7,8 @@ import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 
+import java.nio.charset.Charset;
+
 public class TerminalDecoder extends LengthFieldBasedFrameDecoder {
 
     private static final int HEADER_SIZE = 3;
@@ -30,6 +32,9 @@ public class TerminalDecoder extends LengthFieldBasedFrameDecoder {
         short packetLen = in.readShort();
         //读取command字段
         byte command = in.readByte();
+        //读取clientId字段
+        byte[] clientId = new byte[11];
+        in.readBytes(clientId);
 
         if(readableBytes!=packetLen){
             throw new Exception("标记的长度不符合实际长度");
@@ -41,6 +46,6 @@ public class TerminalDecoder extends LengthFieldBasedFrameDecoder {
         Decoder decoder = CommandMapping.getDecoder(command);
         //解析成内容对象
         Object content = decoder.decode(bytes);
-        return new Protocol(packetLen,command,content);
+        return new Protocol(packetLen,command,new String(clientId, Charset.defaultCharset()),content);
     }
 }

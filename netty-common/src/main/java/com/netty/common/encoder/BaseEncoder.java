@@ -1,6 +1,5 @@
 package com.netty.common.encoder;
 
-import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -19,6 +18,7 @@ public abstract class BaseEncoder implements Encoder {
         ByteBuf byteBuffer = Unpooled.buffer(packetLen);
         byteBuffer.writeShort(packetLen);
         byteBuffer.writeByte(protocol.getCommand());
+        byteBuffer.writeBytes(protocol.getClientId().getBytes(Charset.defaultCharset()));
         byteBuffer.writeBytes(bytes);
         //转化为字节码
         /*byte[] b = new byte[packetLen];

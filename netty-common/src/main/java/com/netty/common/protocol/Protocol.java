@@ -17,11 +17,13 @@ public class Protocol {
 
     private byte command;
 
+    private String clientId;
+
     private Object content;
 
 
     public short getHeaderLen(){
-        return 3;
+        return 14;
     }
 
 }

@@ -16,6 +16,7 @@ public class TerminaClientHandler extends ChannelInboundHandlerAdapter {
         Protocol send = new Protocol();
         byte command = 96;
         send.setCommand(command);
+        send.setClientId("13670226316");
         Test test = new Test("客户端发送的消息11111111111111111");
         send.setContent(test);
         ctx.writeAndFlush(send);
