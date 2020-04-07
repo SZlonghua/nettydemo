@@ -16,4 +16,8 @@ public class ChannelHolder {
     public static Channel get(String id){
         return channelMapping.get(id);
     }
+
+    public static void remove(String id){
+        channelMapping.remove(id);
+    }
 }

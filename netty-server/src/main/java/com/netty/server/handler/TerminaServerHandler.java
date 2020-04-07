@@ -37,6 +37,10 @@ public class TerminaServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         log.info("server exceptionCaught");
+
+        String clientId = ChannelAttrUtil.getClientId(ctx.channel());
+        ChannelHolder.remove(clientId);
+
         cause.printStackTrace();
         ctx.close();
     }
