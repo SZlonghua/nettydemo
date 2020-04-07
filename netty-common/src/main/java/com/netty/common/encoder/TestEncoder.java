@@ -2,9 +2,6 @@ package com.netty.common.encoder;
 
 import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
-
 import java.nio.charset.Charset;
 
 public class TestEncoder extends BaseEncoder implements Encoder {

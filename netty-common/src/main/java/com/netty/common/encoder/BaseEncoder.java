@@ -21,9 +21,10 @@ public abstract class BaseEncoder implements Encoder {
         byteBuffer.writeByte(protocol.getCommand());
         byteBuffer.writeBytes(bytes);
         //转化为字节码
-        byte[] b = new byte[packetLen];
-        byteBuffer.readBytes(bytes);
-        return b;
+        /*byte[] b = new byte[packetLen];
+        byteBuffer.readBytes(b);
+        return b;*/
+        return byteBuffer.array();
     }
 
     abstract  byte[] getContentBytes(Protocol protocol);

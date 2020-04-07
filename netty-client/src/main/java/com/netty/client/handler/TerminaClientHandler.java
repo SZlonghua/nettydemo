@@ -1,5 +1,6 @@
 package com.netty.client.handler;
 
+import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -15,7 +16,8 @@ public class TerminaClientHandler extends ChannelInboundHandlerAdapter {
         Protocol send = new Protocol();
         byte command = 96;
         send.setCommand(command);
-        send.setContent("客户端发送的消息11111111111111111");
+        Test test = new Test("客户端发送的消息11111111111111111");
+        send.setContent(test);
         ctx.writeAndFlush(send);
     }
 
