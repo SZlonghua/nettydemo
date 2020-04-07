@@ -3,6 +3,7 @@ package com.netty.server.handler;
 import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import com.netty.server.util.ChannelAttrUtil;
+import com.netty.server.util.ChannelHolder;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +22,8 @@ public class TerminaServerHandler extends ChannelInboundHandlerAdapter {
         Test test = new Test("我收到了消息333333");
         send.setContent(test);
 
-        //ChannelAttrUtil.putClientId(ctx.channel(),"");
+        ChannelAttrUtil.putClientId(ctx.channel(),message.getClientId());
+        ChannelHolder.put(message.getClientId(),ctx.channel());
 
         ctx.write(send);
     }
