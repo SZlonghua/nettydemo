@@ -1,40 +1,56 @@
 package com.netty.common.constant;
 
 import com.netty.common.decoder.Decoder;
-import com.netty.common.decoder.TestDecoder;
 import com.netty.common.encoder.Encoder;
-import com.netty.common.encoder.TestEncoder;
-import com.netty.common.model.Test;
 import java.util.HashMap;
 import java.util.Map;
 
 public class CommandMapping {
 
-    private static final Map<Byte, Config> decoderMapping = new HashMap<Byte, Config>();
+    private static Boolean initCompleted = false;
 
-    public static final Byte TEST = 0x60;
+    private static final Map<Byte, String> decoderMapping = new HashMap<Byte, String>();
+    private static final Map<Byte, String> encoderMapping = new HashMap<Byte, String>();
+    private static final Map<Byte, String> messageMapping = new HashMap<Byte, String>();
+    private static final Map<Byte, HandleInfo> handleMapping = new HashMap<Byte, HandleInfo>();
 
-    static {
-        decoderMapping.put(TEST, new Config(Test.class, TestDecoder.class, TestEncoder.class));
+    public static void registryDecoder(Byte command,String className){
+        decoderMapping.put(command,className);
     }
-
-
-    public static Config getConfig(Byte command) throws Exception {
-        Config config = decoderMapping.get(command);
-        if (config == null) {
-            config = decoderMapping.get(TEST);
-        }
-        return config;
+    public static void registryEncoder(Byte command,String className){
+        encoderMapping.put(command,className);
+    }
+    public static void registryMessage(Byte command,String className){
+        messageMapping.put(command,className);
+    }
+    public static void registryHandle(Byte command,HandleInfo handleInfo){
+        handleMapping.put(command,handleInfo);
     }
 
     public static Decoder getDecoder(Byte command) throws Exception {
-        Config config = getConfig(command);
-        Class decoderType = config.getDecoderType();
-        return (Decoder) decoderType.newInstance();
+        String className = decoderMapping.get(command);
+        Class<?> aClass = Class.forName(className);
+        return (Decoder) aClass.newInstance();
     }
     public static Encoder getEncoder(Byte command) throws Exception {
-        Config config = getConfig(command);
-        Class decoderType = config.getEncoderType();
-        return (Encoder) decoderType.newInstance();
+        String className = encoderMapping.get(command);
+        Class<?> aClass = Class.forName(className);
+        return (Encoder) aClass.newInstance();
+    }
+    public static Object getMessage(Byte command) throws Exception {
+        String className = messageMapping.get(command);
+        Class<?> aClass = Class.forName(className);
+        return aClass.newInstance();
+    }
+    public static HandleInfo getHandleName(Byte command) throws Exception {
+        return handleMapping.get(command);
+    }
+
+    public static synchronized Boolean getInitCompleted() {
+        return initCompleted;
+    }
+
+    public static synchronized void setInitCompleted(Boolean initCompleted) {
+        CommandMapping.initCompleted = initCompleted;
     }
 }

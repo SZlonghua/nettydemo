@@ -1,31 +1,32 @@
 package com.netty.server.handler;
 
+import com.netty.common.constant.CommandMapping;
+import com.netty.common.constant.HandleInfo;
 import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import com.netty.server.util.ChannelAttrUtil;
 import com.netty.server.util.ChannelHolder;
+import com.netty.server.util.SpringContextUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import lombok.extern.slf4j.Slf4j;
+
+import java.lang.reflect.Method;
 
 @Slf4j
 public class TerminaServerHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelRead(ChannelHandlerContext ctx, Object msg) throws Exception {
-
         Protocol message = (Protocol) msg;
         log.info("服务端收到消息："+message);
-        Protocol send = new Protocol();
-        byte command = 96;
-        send.setCommand(command);
-        send.setClientId("13670226316");
-        Test test = new Test("我收到了消息333333");
-        send.setContent(test);
-
         ChannelAttrUtil.putClientId(ctx.channel(),message.getClientId());
         ChannelHolder.put(message.getClientId(),ctx.channel());
 
-        ctx.write(send);
+        HandleInfo handleInfo = CommandMapping.getHandleName(message.getCommand());
+        Class<?> clazz = Class.forName(handleInfo.getHandleClass());
+        Object handleInstance = SpringContextUtil.getBean(clazz);
+        Method method = clazz.getMethod(handleInfo.getHandleMethod(),Protocol.class);
+        method.invoke(handleInstance,message);
     }
 
     @Override

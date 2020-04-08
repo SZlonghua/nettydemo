@@ -1,9 +1,11 @@
 package com.netty.common.encoder;
 
+import com.netty.common.constant.CommandConstant;
 import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import java.nio.charset.Charset;
 
+@com.netty.common.annotation.Encoder(CommandConstant.TEST)
 public class TestEncoder extends BaseEncoder implements Encoder {
 
     @Override

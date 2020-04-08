@@ -1,5 +1,7 @@
 package com.netty.client.handler;
 
+import com.netty.common.annotation.IOTListenerAnnotationRegistry;
+import com.netty.common.constant.CommandMapping;
 import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import io.netty.channel.ChannelHandlerContext;
@@ -13,6 +15,9 @@ public class TerminaClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("client channelActive");
+        while (!CommandMapping.getInitCompleted()){
+            IOTListenerAnnotationRegistry.init();
+        }
         Protocol send = new Protocol();
         byte command = 96;
         send.setCommand(command);

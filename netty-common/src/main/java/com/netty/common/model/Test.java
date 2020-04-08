@@ -1,5 +1,7 @@
 package com.netty.common.model;
 
+import com.netty.common.annotation.Message;
+import com.netty.common.constant.CommandConstant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,6 +13,7 @@ import javax.validation.constraints.Size;
 @NoArgsConstructor
 @AllArgsConstructor
 @Slf4j
+@Message(CommandConstant.TEST)
 public class Test {
     private String content;
 }
