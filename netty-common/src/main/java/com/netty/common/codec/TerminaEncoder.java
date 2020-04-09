@@ -1,5 +1,7 @@
 package com.netty.common.codec;
 
+import com.netty.common.constant.CommandMapping;
+import com.netty.common.encoder.Encoder;
 import com.netty.common.protocol.Protocol;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
@@ -14,9 +16,7 @@ public class TerminaEncoder extends MessageToByteEncoder<Protocol> {
         if(msg == null){
             throw new Exception("msg is null");
         }
-        out.writeShort(msg.getPacketLen());
-        out.writeByte(msg.getCommand());
-        String content = (String)msg.getContent();
-        out.writeBytes(content.getBytes(Charset.forName("UTF-8")));
+        Encoder encoder = CommandMapping.getEncoder(msg.getCommand());
+        out.writeBytes(encoder.encoder(msg));
     }
 }

@@ -1,5 +1,10 @@
 package com.netty.client.handler;
 
+import com.netty.common.annotation.IOTListenerAnnotationRegistry;
+import com.netty.common.constant.CommandConstant;
+import com.netty.common.constant.CommandMapping;
+import com.netty.common.model.Person;
+import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
@@ -12,10 +17,15 @@ public class TerminaClientHandler extends ChannelInboundHandlerAdapter {
     @Override
     public void channelActive(ChannelHandlerContext ctx) throws Exception {
         log.info("client channelActive");
+        while (!CommandMapping.getInitCompleted()){
+            IOTListenerAnnotationRegistry.init();
+        }
         Protocol send = new Protocol();
-        byte command = 96;
+        byte command = CommandConstant.PERSON;
         send.setCommand(command);
-        send.setContent("客户端发送的消息11111111111111111");
+        send.setClientId("13670226316");
+        Person test = new Person("1","liaotao");
+        send.setContent(test);
         ctx.writeAndFlush(send);
     }
 
