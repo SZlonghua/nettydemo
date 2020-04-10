@@ -74,7 +74,7 @@ public class IOTListenerAnnotationRegistry {
     private static List<MetadataReader> scanPackage() throws Exception{
         ResourcePatternResolver resolver = ResourcePatternUtils.getResourcePatternResolver(null);
         MetadataReaderFactory metaReader = new CachingMetadataReaderFactory();
-        Resource[] resources = resolver.getResources("classpath*:/**/*.class");
+        Resource[] resources = resolver.getResources("classpath*:com/netty/**/*.class");
         List<MetadataReader> readers = new ArrayList<MetadataReader>();
         for (Resource r : resources) {
             MetadataReader reader = metaReader.getMetadataReader(r);

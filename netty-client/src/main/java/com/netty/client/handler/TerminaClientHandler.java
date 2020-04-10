@@ -8,7 +8,11 @@ import com.netty.common.model.Test;
 import com.netty.common.protocol.Protocol;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
+
+import java.util.Date;
 
 
 @Slf4j
@@ -39,6 +43,18 @@ public class TerminaClientHandler extends ChannelInboundHandlerAdapter {
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         log.info("server channelReadComplete");
         ctx.flush();
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent){
+            IdleStateEvent event = (IdleStateEvent)evt;
+            if (event.state()== IdleState.WRITER_IDLE){
+                log.info("已经4秒未向服务端写消息了,客户端写超时 {}",new Date());
+            }
+        }else {
+            super.userEventTriggered(ctx,evt);
+        }
     }
 
     @Override

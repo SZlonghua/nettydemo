@@ -9,9 +9,12 @@ import com.netty.server.util.ChannelHolder;
 import com.netty.server.util.SpringContextUtil;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
+import io.netty.handler.timeout.IdleState;
+import io.netty.handler.timeout.IdleStateEvent;
 import lombok.extern.slf4j.Slf4j;
 
 import java.lang.reflect.Method;
+import java.util.Date;
 
 @Slf4j
 public class TerminaServerHandler extends ChannelInboundHandlerAdapter {
@@ -33,6 +36,18 @@ public class TerminaServerHandler extends ChannelInboundHandlerAdapter {
     public void channelReadComplete(ChannelHandlerContext ctx) throws Exception {
         log.info("server channelReadComplete");
         ctx.flush();
+    }
+
+    @Override
+    public void userEventTriggered(ChannelHandlerContext ctx, Object evt) throws Exception {
+        if (evt instanceof IdleStateEvent){
+            IdleStateEvent event = (IdleStateEvent)evt;
+            if (event.state()== IdleState.READER_IDLE){
+                log.info("已经5秒未收到客户端 {} 的消息了,服务端读超时 {}",ChannelAttrUtil.getClientId(ctx.channel()),new Date());
+            }
+        }else {
+            super.userEventTriggered(ctx,evt);
+        }
     }
 
     @Override
