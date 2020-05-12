@@ -43,7 +43,7 @@ public class TerminaServerHandler extends ChannelInboundHandlerAdapter {
         if (evt instanceof IdleStateEvent){
             IdleStateEvent event = (IdleStateEvent)evt;
             if (event.state()== IdleState.READER_IDLE){
-                log.info("已经5秒未收到客户端 {} 的消息了,服务端读超时 {}",ChannelAttrUtil.getClientId(ctx.channel()),new Date());
+                //log.info("已经5秒未收到客户端 {} 的消息了,服务端读超时 {}",ChannelAttrUtil.getClientId(ctx.channel()),new Date());
             }
         }else {
             super.userEventTriggered(ctx,evt);

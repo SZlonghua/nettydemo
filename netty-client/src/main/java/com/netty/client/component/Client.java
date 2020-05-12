@@ -51,7 +51,7 @@ public class Client {
                         }
                     });
             // Start the client.
-            ChannelFuture f = b.connect("127.0.0.1", port).sync();
+            ChannelFuture f = b.connect("192.168.2.36", port).sync();
             clientChannel = f.channel();
             log.info("client transport started!");
         } catch (InterruptedException e) {
